@@ -4,11 +4,11 @@ This file is the sole source of truth for every finding's ID, delivery mode, lif
 Read and update this ledger instead of inferring state from chat history, clone reports, or earlier reviews.
 `FORMAT.md` owns research, drafting, implementation authorization, approval, and publication rules.
 
-Next finding ID: ISSUE-2026-006
+Next finding ID: ISSUE-2026-007
 
 ## Findings
 
-### ISSUE-2026-001 — action metadata: transport inputs use ineffective runtime names
+### ISSUE-2026-001 — action metadata: public inputs use ineffective runtime names
 
 - Status: Hold.
 - Delivery mode: Undecided.
@@ -18,16 +18,16 @@ Next finding ID: ISSUE-2026-006
 - Confidence: High.
 - Type: mapping.
 - Publication target: Undecided.
-- Summary: The composite-action adapter omits `proxy_protocol` and maps both cipher inputs to names that `drone-ssh v1.8.2` does not read.
+- Summary: The composite-action adapter omits `proxy_protocol` and maps the cipher and `allenvs` inputs to names that `drone-ssh v1.8.2` does not read.
 - Evidence: Current `upstream/master` commit `b838bc2f27cd449b957159452d432aff91697637` matches the fork for the affected files.
-- Evidence: `action.yml:135,137` exports `INPUT_CIPHER` and `INPUT_PROXY_CIPHER`, while `action.yml:105-141` has no `INPUT_PROXY_PROTOCOL`.
-- Evidence: `drone-ssh v1.8.2` `main.go` reads `INPUT_CIPHERS`, `INPUT_PROXY_CIPHERS`, and `INPUT_PROXY_PROTOCOL`.
-- Shared change pressure: The public action inputs and the binary environment contract describe one transport configuration handoff and must change together.
-- Impact: Source proves that explicit `cipher`, `proxy_cipher`, and `proxy_protocol` values do not reach the default binary through its recognized names; user-visible failures are not yet reproduced.
-- Proposed direction: Add `INPUT_PROXY_PROTOCOL` and replace the two singular cipher environment names with the plural names consumed by the default binary.
-- Risks and boundaries: Preserve public input names and values, leave validation to `drone-ssh`, and account for users who override `version` with a release that may expose a different contract.
-- Verification: Run `uses: ./` with a controlled executable wrapper that handles `--version` and records the three recognized environment values exactly.
-- Missing publication evidence: Search all upstream prior art and reproduce the mapping through a focused local action invocation before selecting a publication target.
+- Evidence: `action.yml:132,135,137` exports `INPUT_ALL_ENVS`, `INPUT_CIPHER`, and `INPUT_PROXY_CIPHER`, while `action.yml:105-141` has no `INPUT_PROXY_PROTOCOL`.
+- Evidence: `drone-ssh v1.8.2` `main.go` reads `INPUT_ALLENVS`, `INPUT_CIPHERS`, `INPUT_PROXY_CIPHERS`, and `INPUT_PROXY_PROTOCOL`.
+- Shared change pressure: The public action inputs and the binary environment contract describe one composite adapter handoff and must change together.
+- Impact: Source proves that explicit `allenvs`, `cipher`, `proxy_cipher`, and non-default `proxy_protocol` values do not reach the default binary through its recognized names; user-visible failures are not yet reproduced.
+- Proposed direction: Add `INPUT_PROXY_PROTOCOL` and replace the three ineffective environment names with the names consumed by the default binary.
+- Risks and boundaries: Preserve public input names and values, leave validation to `drone-ssh`, account for workflows that expose the current internal environment names through `envs`, and scope compatibility claims to verified binary versions.
+- Verification: Run `uses: ./` with a controlled executable wrapper that handles `--version` and records the four recognized environment values exactly.
+- Missing publication evidence: Search all upstream prior art and reproduce the complete mapping through a focused local action invocation before selecting a publication target.
 
 ### ISSUE-2026-002 — entrypoint: static output delimiter can truncate captured stdout
 
@@ -60,17 +60,18 @@ Next finding ID: ISSUE-2026-006
 - Confidence: High.
 - Type: mapping.
 - Publication target: Undecided.
-- Summary: The launcher rejects Git Bash platform names and constructs a suffixless target even though the selected Windows release is an `.exe`.
+- Summary: The launcher rejects Git for Windows platform names and constructs a suffixless target even though the selected Windows release is an `.exe`.
 - Evidence: Current `upstream/master` commit `b838bc2f27cd449b957159452d432aff91697637` matches the fork for `action.yml` and `entrypoint.sh`.
 - Evidence: `action.yml:101-104` runs the entrypoint with Bash, while `entrypoint.sh:24-30` accepts only literal `darwin`, `linux`, or `windows`.
 - Evidence: `env SSH_CLIENT_OS=MINGW64_NT-10.0 GITHUB_ACTION_PATH=/tmp INPUT_CURL_INSECURE=false ./entrypoint.sh` exits with code 2 and reports `Unknown or unsupported platform`.
+- Evidence: Open upstream issue `https://github.com/appleboy/ssh-action/issues/362` reports `MINGW64_NT-*` failure and contains a second user report of the same error.
 - Evidence: The `drone-ssh v1.8.2` release names its Windows AMD64 executable `drone-ssh-1.8.2-windows-amd64.exe`, and its `.goreleaser.yaml` excludes Windows/ARM64.
 - Shared change pressure: Runner platform normalization and release-artifact naming jointly determine one executable target and must describe the same supported matrix.
-- Impact: The Windows Git Bash path is observed to fail before download, version validation, or SSH execution; the complete corrected journey is not yet verified.
-- Proposed direction: Normalize `mingw*`, `msys*`, and `cygwin*` to `windows`, append `.exe` for Windows targets, and reject release/platform combinations without an artifact before download.
-- Risks and boundaries: Do not claim generic Windows or ARM64 support beyond the selected release matrix, and preserve explicit platform and architecture overrides.
-- Verification: Run `uses: ./` on `windows-latest` without `SSH_CLIENT_OS`, then prove download, `--version`, and one controlled SSH command.
-- Missing publication evidence: Search all upstream prior art and complete the `windows-latest` end-to-end reproduction.
+- Impact: The Windows x64 Git Bash path is observed to fail before download, version validation, or SSH execution; the complete corrected journey is not yet verified.
+- Proposed direction: Normalize the supported `mingw*` and `msys*` platform families to `windows` and use the `.exe` suffix consistently for Windows targets.
+- Risks and boundaries: Do not claim Windows ARM64 support, preserve explicit platform and architecture overrides, and scope custom-version compatibility to releases with the same asset schema.
+- Verification: On `windows-2025` with `shell: bash`, set `GITHUB_ACTION_PATH`, `INPUT_CURL_INSECURE=false`, and `INPUT_CAPTURE_STDOUT=false`, then run `bash ./entrypoint.sh --version` and assert selection and execution of the `.exe` asset.
+- Missing publication evidence: Search all upstream prior art and complete the `windows-2025` bootstrap reproduction.
 
 ### ISSUE-2026-004 — action output: drone-ssh merges stderr and status into stdout
 
@@ -114,3 +115,25 @@ Next finding ID: ISSUE-2026-006
 - Risks and boundaries: Keep `entrypoint.sh` as the runtime owner and update all public descriptions whenever the pin changes; do not add unrelated input-format claims.
 - Verification: Compare the final metadata and three tables against the empty and explicit `DRONE_SSH_VERSION` paths in `entrypoint.sh`.
 - Missing publication evidence: Search all upstream prior art and confirm maintainer intent for how the pinned default should be presented before selecting a publication target.
+
+### ISSUE-2026-006 — entrypoint: failed capture leaves output record unterminated
+
+- Status: Hold.
+- Delivery mode: Undecided.
+- Location: Not published.
+- Evidence class: Observed and Source-proven.
+- Internal priority: High.
+- Confidence: High.
+- Type: output.
+- Publication target: Undecided.
+- Summary: A nonzero `drone-ssh` pipeline exits the strict-mode entrypoint before it writes the closing `GITHUB_OUTPUT` delimiter.
+- Evidence: Current `upstream/master` commit `b838bc2f27cd449b957159452d432aff91697637` matches the fork for `action.yml`, `entrypoint.sh`, and `.github/workflows/main.yml`.
+- Evidence: `entrypoint.sh:3,73-76` enables `pipefail`, opens `stdout<<EOF`, runs `drone-ssh` through `tee`, and writes the closing delimiter only after the pipeline succeeds.
+- Evidence: `.github/workflows/main.yml:823-835` exercises a failing remote script with `capture_stdout: true` but does not assert the resulting output record.
+- Evidence: Open upstream issue `https://github.com/appleboy/ssh-action/issues/375` observes `Invalid value. Matching delimiter not found 'EOF'` and unavailable failure output after a remote command exits nonzero.
+- Shared change pressure: Pipeline exit propagation and output framing form one capture lifecycle and must complete the output record before returning the command result.
+- Impact: Source and the upstream reproduction prove that failed captured commands add a secondary runner parser error and do not expose the captured output to later failure-handling steps.
+- Proposed direction: Execute the pipeline as an `if` condition, capture its real failure status, close the output record with the delimiter on its own line, and return the saved status after successful framing.
+- Risks and boundaries: Preserve `tee` failure handling, successful capture behavior, and the original command status; fixed-delimiter collision remains separately owned by ISSUE-2026-002.
+- Verification: Use a controlled executable that writes stdout without a final newline and exits 17, then assert exit status 17, live output, and one complete parseable `stdout` record.
+- Missing publication evidence: Read all prior work around issue 375 and reproduce the failure against current `upstream/master` before selecting a publication target.
