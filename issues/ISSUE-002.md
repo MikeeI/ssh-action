@@ -81,7 +81,7 @@ Migration: None.
 
 Branch: `fix/capture-output-delimiter`
 Base: `upstream/master@b838bc2f27cd449b957159452d432aff91697637`
-Scope: Generate one randomized Bash-only delimiter per successful captured output record.
+Scope: Generate one randomized Bash-only delimiter per captured output invocation.
 Commit: `d3b63444cdbf907b1f806e6a7b5d28236f224e55`
 Push: `origin/fix/capture-output-delimiter`
 Checks:
