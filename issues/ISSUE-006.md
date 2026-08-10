@@ -86,7 +86,7 @@ Migration: None.
 Branch: `fix/capture-failure-output`
 Base: `upstream/master@b838bc2f27cd449b957159452d432aff91697637`
 Scope: Close captured output records before returning a nonzero `drone-ssh | tee` pipeline status.
-Commit: `4eaeee8062d7af536780427c79a5510a543ffa5c`
+Commit: `f39ff007253f7a61459ecbd0878d6ab14a8ca84d`
 Push: `origin/fix/capture-failure-output`
 Checks:
 
@@ -94,6 +94,7 @@ Checks:
 - Controlled base executable writes `payload` without LF and exits 17 → Exit 17; output record remains unterminated.
 - Controlled branch executable writes `payload` without LF and exits 17 → Exit 17; one complete output record.
 - Controlled branch executable writes newline-terminated or empty stdout and exits 0 → Existing parsed value shape preserved.
+- Controlled branch executable writes stdout ending in NUL and exits 17 → NUL preserved; separator and delimiter remain standalone.
 
 ## Draft
 
@@ -134,6 +135,7 @@ This change records the pipeline status, completes the output record, and return
 - `bash -n entrypoint.sh && shellcheck entrypoint.sh && git diff --check` — passed.
 - Controlled executable writes `payload` without a final newline and exits 17 — the entrypoint exits 17 and writes one complete `stdout` record.
 - Controlled executable writes newline-terminated or empty stdout and exits 0 — the existing parsed value shape is preserved.
+- Controlled executable writes stdout ending in NUL and exits 17 — the NUL is preserved and the output record remains complete.
 
 I checked the relevant issues, comments, pull requests, discussions, and releases; this pull request is not a duplicate.
 
