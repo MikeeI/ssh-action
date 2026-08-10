@@ -10,56 +10,67 @@ The repository owns composite-action metadata, the Bash downloader and launcher,
 
 - Official upstream: [appleboy/ssh-action](https://github.com/appleboy/ssh-action).
 - This checkout is the public [MikeeI/ssh-action](https://github.com/MikeeI/ssh-action) fork, not an independently owned product.
-- The goal is to support upstream with evidence-backed, high-ROI issues and pull requests.
-- `ISSUES-PRS.md` tracks every finding and its user-selected Issue or Pull request delivery mode.
+- The goal is to support upstream with evidence-backed, high-ROI issues, comments, and pull requests.
+- `ISSUES.md` provides the compact finding overview and global ID allocator.
+- `issues/ISSUE-NNN.md` owns the complete durable record for one root cause.
 - `FORMAT.md` owns research, drafting, implementation authorization, approval, and publication rules.
 - High ROI means meaningful user or maintainer value for limited implementation, regression, and review cost.
-- Prioritize small, well-scoped fixes with outsized benefit.
-- Consider correctness, release safety, workflow behavior, action metadata, shell portability, security boundaries, documentation, and maintainability.
+- Prioritize small, well-scoped corrections with outsized benefit.
+- Prefer a pull request when a bounded verified fix is ready and no active implementation owns it.
+- Otherwise comment when a thread owns the same problem or root cause and new evidence advances it.
+- Otherwise open a new issue when durable maintainer discussion is useful.
+- Otherwise keep the finding on Hold.
+- Easy performance wins are valuable, but research and contributions MUST NOT be limited to performance.
+- Also consider correctness, reliability, compatibility, cross-platform behavior, release safety, workflows, APIs, and documentation.
+- Apply `skill-fork-contribution-tracking` for ledger, lifecycle, personal-branch, and upstream handoff work.
 - Apply `skill-maintainer-communication` before external issues, pull requests, reviews, comments, or discussions.
 - Search existing work first, follow upstream templates and disclosure rules, and avoid duplicate or low-evidence posts.
+- Apply `skill-semantic-compression-3-0` when authoring or restructuring tracking content.
 - Apply `skill-git-commit-format` while respecting explicit upstream contribution and commit conventions.
-- Never choose Issue or Pull request mode on the user's behalf.
-- Issue mode is report-only unless the user separately requests implementation.
+- Never choose Report or Pull request mode on the user's behalf.
+- Report mode permits issues and comments but no source implementation.
 - Pull request mode authorizes only the scoped implementation recorded for that finding.
-- Base upstream pull request branches on current `upstream/master`.
-- Keep fork-only documentation, ledgers, configuration, and personal commits out of upstream pull requests.
+- Base upstream contribution branches on current `upstream/master`.
+- Keep fork-only context, ledgers, configuration, and personal commits out of upstream contribution diffs.
 - Reproduce claimed bugs against current upstream and run the narrowest conclusive verification.
-- Publish one coherent root cause per issue or pull request.
-- Avoid speculative churn, broad cleanup, unverified security or performance claims, and generic AI-generated submissions.
+- Publish one coherent root cause per issue, comment, or pull request.
+- Avoid speculative churn, broad cleanup, benchmark-free performance claims, and generic AI-generated submissions.
 
 ## Finding and Contribution Ledger
 
-- At the start of every agent session, agents MUST read root `ISSUES-PRS.md` before repository work.
-- `ISSUES-PRS.md` is authoritative for finding IDs, delivery mode, status, evidence, and locations.
+- At the start of every agent session, agents MUST read root `ISSUES.md` before repository work.
+- `ISSUES.md` owns the global `Next finding ID` allocator and compact cross-finding overview.
+- Each `issues/ISSUE-NNN.md` owns one finding's state, mode, evidence, Resume, drafts, and location.
 - `FORMAT.md` is authoritative for research, drafting, implementation boundaries, and publication format.
-- This file exclusively owns which GitHub actions require user approval.
-- Before adding a finding, search every ledger entry and update an existing matching root cause.
-- New findings MUST use the global `Next finding ID` value and increment it in the same edit.
-- Finding IDs use `ISSUE-YYYY-NNN` and are permanent.
-- Never reuse, renumber, or scope finding IDs by subsystem, status, or session.
-- Update `ISSUES-PRS.md` in the same task whenever a finding, mode, status, evidence, or location changes.
-- Every entry MUST use the detailed field and section contract in `FORMAT.md`.
-- New findings start with `Delivery mode: Undecided.` and `Location: Not published.`.
-- Hold source-only findings until currentness, prior art, impact claims, and abstraction cost are honest.
-- Clone detectors, AST matches, text similarity, and shared names produce candidates only.
-- A DRY entry requires shared change pressure, realistic drift, and a consolidation simpler than synchronization.
-- The user selects Issue or Pull request mode for each finding.
-- Issue mode MUST NOT implement the finding unless the user separately authorizes a fix.
+- This file exclusively owns which external repository actions require user approval.
+- Before adding a finding, search the index and every relevant issue record for the same symptom or root cause.
+- Update an existing record when it already owns the root cause.
+- New findings MUST use `Next finding ID`; create the issue file, add its index row, and increment the allocator together.
+- Finding IDs use `ISSUE-NNN`, start at `ISSUE-001`, and remain permanent.
+- Never reuse, renumber, or scope IDs by subsystem, status, session, or contribution type.
+- Update the issue file and `ISSUES.md` together after state, mode, priority, target, Resume, or location changes.
+- Every issue record MUST use the field and section contract in `FORMAT.md`.
+- New findings start with `State: Hold`, `Mode: Undecided`, `Target: Undecided`, and `Location: Not published.`.
+- Hold source-only findings until currentness, prior art, impact claims, and proposed correction costs are honest.
+- Clone detectors, AST matches, text similarity, shared names, and TODOs produce candidates only.
+- A DRY finding requires shared change pressure, realistic drift, and consolidation simpler than synchronization.
+- The user selects Report or Pull request mode for each finding.
+- Report mode MUST NOT implement the finding.
 - Pull request mode MAY implement only the recorded scope after research resolves callers and failure modes.
 - Pull request work MUST verify behavior, commit, push, and reach Ready before external publication.
-- Show the exact draft and target before publishing an issue or pull request to official upstream.
-- Publish an official-upstream issue or pull request only after the user approves the exact draft and target.
+- Show the exact draft and target before publishing an issue, comment, or pull request to official upstream.
+- Publish to official upstream only after the user approves the exact current draft and target.
+- Any draft or target change requires showing the complete current draft and target again before publication.
+- Run the read-only validator bundled with `skill-fork-contribution-tracking` after every ledger mutation.
 - Record the final external URL in `Location` immediately after publication.
-- Keep `FORMAT.md`, `ISSUES-PRS.md`, and fork-only `AGENTS.md` changes out of upstream pull requests.
+- Keep `FORMAT.md`, `ISSUES.md`, `issues/`, and fork-only `AGENTS.md` changes out of upstream contribution diffs.
 
-### GitHub approval scope
+### External publication approval
 
-Only publishing an issue or pull request to official upstream is approval-gated.
-Before either action, read the current upstream issue template and contribution guidance and explain its applicable policy.
-The human must understand, review, and own every changed line and every submission statement.
-Commits, pushes, fork writes, and all other GitHub actions are preauthorized.
-Execute them automatically after each coherent verified change and never ask for confirmation.
+Only an external issue, comment, review, discussion, or pull request write is approval-gated.
+Before publication, read current contribution guidance and explain any applicable project policy.
+The human must be able to review and own every submission statement.
+Fork commits, pushes, tracking updates, and source implementation follow the active repository contract.
 
 ## Architecture & Data Flow
 
