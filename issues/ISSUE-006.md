@@ -1,9 +1,9 @@
 # ISSUE-006 — entrypoint: failed capture leaves output record unterminated
 
-State: Ready
+State: Published
 Mode: Pull request
 Target: New pull request
-Location: Not published.
+Location: https://github.com/appleboy/ssh-action/pull/413
 Priority: High
 Confidence: High
 Type: reliability
@@ -63,9 +63,9 @@ None.
 
 ## Resume
 
-Index: Approve pull request draft
-Next: Review the exact target and draft, then approve or revise publication.
-Done when: The user approves the exact current target and draft.
+Index: Monitor pull request review
+Next: Monitor pull request 413 and respond only with new evidence or requested bounded changes.
+Done when: Upstream merges, closes, or requests a bounded change.
 
 ## Bug reproduction
 
