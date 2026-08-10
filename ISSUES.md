@@ -14,7 +14,7 @@ Next finding ID: ISSUE-007
 | ID | Finding | State | Mode | Target | Priority | Next | Location |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | [ISSUE-001](issues/ISSUE-001.md) | action metadata: public inputs use ineffective runtime names | Ready | Pull request | New pull request | High | Approve pull request draft | Not published. |
-| [ISSUE-002](issues/ISSUE-002.md) | entrypoint: static output delimiter can truncate captured stdout | Hold | Undecided | Undecided | High | Reproduce EOF collision | Not published. |
+| [ISSUE-002](issues/ISSUE-002.md) | entrypoint: static output delimiter can truncate captured stdout | Ready | Pull request | New pull request | High | Approve pull request draft | Not published. |
 | [ISSUE-003](issues/ISSUE-003.md) | entrypoint: Windows Git Bash cannot select the released executable | Hold | Undecided | Undecided | High | Run Windows bootstrap | Not published. |
 | [ISSUE-004](issues/ISSUE-004.md) | action output: drone-ssh merges stderr and status into stdout | Hold | Undecided | Undecided | High | Research stream ownership | Not published. |
 | [ISSUE-005](issues/ISSUE-005.md) | documentation: version input promises latest instead of the pinned default | Hold | Undecided | Undecided | High | Confirm version intent | Not published. |
