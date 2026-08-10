@@ -18,7 +18,7 @@ Next finding ID: ISSUE-007
 | [ISSUE-003](issues/ISSUE-003.md) | entrypoint: Windows Git Bash cannot select the released executable | Hold | Undecided | Undecided | High | Run Windows bootstrap | Not published. |
 | [ISSUE-004](issues/ISSUE-004.md) | action output: drone-ssh merges stderr and status into stdout | Hold | Undecided | Undecided | High | Research stream ownership | Not published. |
 | [ISSUE-005](issues/ISSUE-005.md) | documentation: version input promises latest instead of the pinned default | Hold | Undecided | Undecided | High | Confirm version intent | Not published. |
-| [ISSUE-006](issues/ISSUE-006.md) | entrypoint: failed capture leaves output record unterminated | Hold | Undecided | Undecided | High | Reproduce failed capture | Not published. |
+| [ISSUE-006](issues/ISSUE-006.md) | entrypoint: failed capture leaves output record unterminated | Ready | Pull request | New pull request | High | Approve pull request draft | Not published. |
 
 ## Terminal
 
